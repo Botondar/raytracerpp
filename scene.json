@@ -1,0 +1,53 @@
+"camera" {
+    "fov" : 70.0,
+    "position" : {2.6, 0.1, 2.1},
+    "forward" : {-1.0, -0.05, -1.0},
+    "up" : {0.0, 1.0, 0.0}
+}
+
+"sphere" {
+    "position" : {0.0, 0.0, 0.0},
+    "radius" : 0.5,
+    "materialdiffuse" : {
+        "color" : {1.0, 1.0, 1.0},
+        "texture" : "earthmap.bmp"
+    }
+}
+
+"sphere" {
+    "position" : {2.0, 0.5, 0.2},
+    "radius" : 0.5,
+    "materialmetal" : {
+        "color": {0.75, 0.75, 0.75},
+        "texture" : "null",
+        "fuzziness" : 0.025
+    }
+}
+
+"sphere" {
+    "position" : {1.0, -0.2, 0.4},
+    "radius" : 0.3,
+    "materialdielectric" : {
+        "color" : {0.9, 0.9, 0.9},
+        "refract" : 1.52
+    }
+}
+
+"sphere" {
+    "position" : {-0.4, -0.1, 0.2},
+    "radius" : 0.4,
+    "materialmetal" : {
+        "color" : {0.725, 0.58, 0.27},
+        "fuzziness" : 0.065
+    }
+}
+
+"plane" {
+    "normal" : {0.0, 1.0, 0.0},
+    "offset" : -0.5,
+    "materialmetal" : {
+        "color" : {0.8, 0.88, 0.8},
+        "texture" : "null",
+        "fuzziness" : 0.02
+    }
+}
