@@ -14,7 +14,7 @@ public:
         \param Forward the direction where the camera's facing.
         \param Up the up axis of the world.
     */
-    CCamera(r32 FieldOfView = (Pi32 / 4.0f),
+    CCamera(r32 FieldOfView = (Pi32 / 2.0f),
             Vec3 Position   = Vec3(0.0f, 0.0f, 0.0f),
             Vec3 Forward    = Vec3(0.0f, 0.0f, -1.0f),
             Vec3 Up         = Vec3(0.0f, 1.0f, 0.0f));
@@ -28,8 +28,8 @@ public:
     Vec3 GetUp() const;
 
     /** Creates a ray from the camera to a given pixel.
-        \param U normalized horizontal pixel coordinate (0 means left, 1 means the right edge).
-        \param V normalized vertical pixel coordinate (0 means bottom, 1 means upper edge).
+        \param U normalized horizontal pixel coordinate (-1 means left, 1 means the right edge).
+        \param V normalized vertical pixel coordinate (-1 means bottom, 1 means upper edge).
         \param AspectRatio the image's width divided by its height.
     */
     CRay RayFromUV(r32 U, r32 V, r32 AspectRatio = 1.0f) const;

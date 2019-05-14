@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common.hpp"
-#include "sharedpointer.hpp"
 #include "ray.hpp"
 #include "material.hpp"
 
@@ -23,12 +22,12 @@ public:
     /** Constructor 
         \param Material pointer to the shape's material.
     */
-    IShape(CSharedPointer<IMaterial> Material);
+    IShape(std::shared_ptr<IMaterial> Material);
 
     virtual ~IShape() = 0;
 
     /** Returns the shape's material pointer. */
-    const CSharedPointer<IMaterial>& GetMaterial() const;
+    const std::shared_ptr<IMaterial>& GetMaterial() const;
 
     /** Returns the UV coordinates of the object at a given point. */
     virtual void GetUV(Vec3 Point, r32& U, r32& V) const = 0;
@@ -42,5 +41,5 @@ public:
     virtual bool Intersect(const CRay& Ray, r32 tMin, r32 tMax, SHitInfo& HitInfo) const = 0;
 
 protected:
-    CSharedPointer<IMaterial> m_Material; /**< Pointer to the shape's material */
+    std::shared_ptr<IMaterial> m_Material; /**< Pointer to the shape's material */
 };

@@ -47,7 +47,7 @@ public:
     void SetCamera(CCamera Camera);
 
     /** Adds a shape to the scene. */
-    void AddShape(IShape* Shape);
+    void AddShape(std::shared_ptr<IShape> Shape);
 
     /** Renders a subregion of the final image.
         \param Region the region to render.
@@ -61,6 +61,9 @@ public:
     */
     void Render(CImage& Image, SRenderParams& Params) const;
 
+    /** Checks whether a ray intersects any objects in the scene.  */
+    bool Intersect(const CRay& Ray, r32 tMin, r32 tMax, SHitInfo& HitInfo) const;
+
     /** Reads the scene from a stream in json format. */
     virtual std::istream& Read(std::istream& Stream);
     /** Writes the scene to a stream in json format. */
@@ -69,8 +72,6 @@ private:
     CCamera m_Camera; /**< The camera whose point of view to render the image from. */
     CHeteroStore<IShape> m_ShapeList; /**< The container that holds the shapes in the scene. */
     
-    /** Checks whether a ray intersects any objects in the scene.  */
-    bool Intersect(const CRay& Ray, r32 tMin, r32 tMax, SHitInfo& HitInfo) const;
     /** Returns the color from a ray simulation. */
     Vec3 TraceRay(CRay Ray, u32 MaxDepth = UINT32_MAX) const;
 };

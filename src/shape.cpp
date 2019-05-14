@@ -1,6 +1,6 @@
 #include "shape.hpp"
 
-IShape::IShape(CSharedPointer<IMaterial> Material) :
+IShape::IShape(std::shared_ptr<IMaterial> Material) :
     m_Material(Material)
 {
 
@@ -11,7 +11,7 @@ IShape::~IShape()
 
 }
 
-const CSharedPointer<IMaterial>& IShape::GetMaterial() const
+const std::shared_ptr<IMaterial>& IShape::GetMaterial() const
 {
     return m_Material;
 }

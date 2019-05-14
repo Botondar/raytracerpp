@@ -3,7 +3,7 @@
 CPlane::CPlane(Vec3 Normal, 
                r32 Offset,
                Vec3 TextureUp, 
-               CSharedPointer<IMaterial> Material) :
+               std::shared_ptr<IMaterial> Material) :
     IShape(Material),
     m_Normal(Normalize(Normal)),
     m_Offset(Offset)
@@ -75,21 +75,21 @@ std::string& CPlane::ReadFromString(std::string& String)
         }
         else if(Name == "materialdiffuse")
         {
-            m_Material = new CMaterialDiffuse(Vec3(0.0f, 0.0f, 0.0f));
+            m_Material = std::make_shared<CMaterialDiffuse>(Vec3(0.0f, 0.0f, 0.0f));
 
             std::string Contents = ExtractBraceContents(String);
             m_Material->ReadFromString(Contents);
         }
         else if(Name == "materialmetal")
         {
-            m_Material = new CMaterialMetal(Vec3(0.0f, 0.0f, 0.0f));
+            m_Material = std::make_shared<CMaterialMetal>(Vec3(0.0f, 0.0f, 0.0f));
 
             std::string Contents = ExtractBraceContents(String);
             m_Material->ReadFromString(Contents);
         }
         else if(Name == "materialdielectric")
         {
-            m_Material = new CMaterialDielectric(Vec3(0.0f, 0.0f, 0.0f), 1.0f);
+            m_Material = std::make_shared<CMaterialDielectric>(Vec3(0.0f, 0.0f, 0.0f), 1.0f);
 
             std::string Contents = ExtractBraceContents(String);
             m_Material->ReadFromString(Contents);

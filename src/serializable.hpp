@@ -14,11 +14,6 @@ public:
     virtual std::ostream& Write(std::ostream& Stream) const = 0;
 };
 
-/** Stream operator overload to read the object from a stream. */
-std::istream& operator>>(std::istream& Stream, ISerializable* Var);
-/** Stream operator overload to write the object to a stream. */
-std::ostream& operator<<(std::ostream& Stream, const ISerializable* Var);
-
 /** Serializable interface that supports reading from and writing to strings */
 class IStringSerializable
 {

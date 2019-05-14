@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common.hpp"
-#include "sharedpointer.hpp"
 #include "ray.hpp"
 #include "image.hpp"
 
@@ -15,13 +14,13 @@ public:
         \param Color the material's diffuse color.
         \param Texture pointer to a CImage which contains additional color information.
     */
-    IMaterial(Vec3 Color, CSharedPointer<CImage> Texture = nullptr);
+    IMaterial(Vec3 Color, std::shared_ptr<CImage> Texture = nullptr);
 
     /** Returns the material's color. */
     Vec3 GetColor() const;
     
     /** Returns a pointer to material's texture. */
-    const CSharedPointer<CImage>& GetTexture() const;
+    const std::shared_ptr<CImage>& GetTexture() const;
 
     /** Reflects the vector given the surface coordinate and its normal.
         \param Ray the ray to reflect.
@@ -31,7 +30,7 @@ public:
     virtual CRay Scatter(const CRay& Ray, Vec3 Position, Vec3 Normal) const = 0;
 protected:
     Vec3 m_Color;
-    CSharedPointer<CImage> m_Texture;
+    std::shared_ptr<CImage> m_Texture;
 };
 
 /** Diffuse (matte) material */
@@ -39,7 +38,7 @@ class CMaterialDiffuse : public IMaterial
 {
 public:
     /** See IMaterial */
-    CMaterialDiffuse(Vec3 Color, CSharedPointer<CImage> Texture = nullptr);
+    CMaterialDiffuse(Vec3 Color, std::shared_ptr<CImage> Texture = nullptr);
 
     /** Scatters the ray in a random direction. */
     virtual CRay Scatter(const CRay& Ray, Vec3 Position, Vec3 Normal) const;
@@ -57,7 +56,7 @@ public:
         \param Fuzziness randomizes the direction of the reflection. 0 means perfectly clear metal.
         \param Texture the texture of the material.
     */
-    CMaterialMetal(Vec3 Color, r32 Fuzziness = 0.0f, CSharedPointer<CImage> Texture = nullptr);
+    CMaterialMetal(Vec3 Color, r32 Fuzziness = 0.0f, std::shared_ptr<CImage> Texture = nullptr);
 
     /** Mathematically reflects ray, randomizing it by the metal's fuzziness. */
     virtual CRay Scatter(const CRay& Ray, Vec3 Position, Vec3 Normal) const;
@@ -77,7 +76,7 @@ public:
         \param RefractiveIndex the physical refractive index of the material.
         \param Texture the texture of the material.
     */
-    CMaterialDielectric(Vec3 Color, r32 RefractiveIndex, CSharedPointer<CImage> Texture = nullptr);
+    CMaterialDielectric(Vec3 Color, r32 RefractiveIndex, std::shared_ptr<CImage> Texture = nullptr);
 
     /** Returns the refraction/reflection of the ray depending on the angle. */
     virtual CRay Scatter(const CRay& Ray, Vec3 Position, Vec3 Normal) const;

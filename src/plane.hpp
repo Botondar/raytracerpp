@@ -19,7 +19,7 @@ public:
     CPlane(Vec3 Normal, 
            r32 Offset,
            Vec3 TextureUp = Vec3(0.0f, 0.0f, -1.0f), 
-           CSharedPointer<IMaterial> Material = nullptr);
+           std::shared_ptr<IMaterial> Material = nullptr);
     virtual ~CPlane();
 
     virtual void GetUV(Vec3 Point, r32& U, r32& V) const;

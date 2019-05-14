@@ -10,7 +10,7 @@ public:
         \param Radius the radius of the sphere.
         \param Material the material of the sphere.
     */
-    CSphere(Vec3 Center, r32 Radius, CSharedPointer<IMaterial> Material = nullptr);
+    CSphere(Vec3 Center, r32 Radius, std::shared_ptr<IMaterial> Material = nullptr);
     virtual ~CSphere();
 
     virtual void GetUV(Vec3 Point, r32& U, r32& V) const;

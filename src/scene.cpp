@@ -19,7 +19,7 @@ void CScene::SetCamera(CCamera Camera)
     m_Camera = Camera;
 }
 
-void CScene::AddShape(IShape* Shape)
+void CScene::AddShape(std::shared_ptr<IShape> Shape)
 {
     m_ShapeList.PushBack(Shape);
 }
@@ -47,16 +47,24 @@ Vec3 CScene::TraceRay(CRay Ray, u32 MaxDepth) const
     {
         if(Intersect(Ray, 0.001f, FLT_MAX, HitInfo))
         {
-            Vec3 ObjectColor = HitInfo.Shape->GetMaterial()->GetColor();
 
-            Vec3 TextureColor = Vec3(1.0f, 1.0f, 1.0f);
-            if(!HitInfo.Shape->GetMaterial()->GetTexture().IsNull())
+            Vec3 ObjectColor = Vec3(1.0f, 1.0f, 1.0f);
+            
+
+            if(HitInfo.Shape->GetMaterial())
             {
-                r32 U, V;
-                HitInfo.Shape->GetUV(HitInfo.Point, U, V);
-                TextureColor = HitInfo.Shape->GetMaterial()->GetTexture()->Sample(U, V);
+                ObjectColor *= HitInfo.Shape->GetMaterial()->GetColor();
+
+                Vec3 TextureColor = Vec3(1.0f, 1.0f, 1.0f);
+                if(HitInfo.Shape->GetMaterial()->GetTexture())
+                {
+                    r32 U, V;
+                    HitInfo.Shape->GetUV(HitInfo.Point, U, V);
+                    TextureColor = HitInfo.Shape->GetMaterial()->GetTexture()->Sample(U, V);
+                }
+
+                ObjectColor *= TextureColor;
             }
-            ObjectColor *= TextureColor;
 
             Color *= ObjectColor;
 
@@ -156,7 +164,11 @@ void CScene::Render(CImage& Image, SRenderParams& Params) const
         " - Depth: " << Params.MaxDepth << '\n' <<
         " - Resolution: " << Params.FullRenderWidth << 'x' << Params.FullRenderHeight << "\n\n";
 
+    // chrono::now()-t a CPORTA nem szereti
+
+#ifndef CPORTA
     auto StartTime = std::chrono::high_resolution_clock::now();
+#endif
 
 #ifdef MULTITHREAD
     std::thread* ThreadPool = new std::thread[RegionCount];
@@ -201,13 +213,17 @@ void CScene::Render(CImage& Image, SRenderParams& Params) const
     Image.Blit(Region.Image, Region.OffsetX, Region.OffsetY);
     
 #endif
-    auto EndTime = std::chrono::high_resolution_clock::now();
 
     std::cout << "\rRendering: 100%\n\n";
+
+    // chrono::now()-t a CPORTA nem szereti
+#ifndef CPORTA
+    auto EndTime = std::chrono::high_resolution_clock::now();
 
     std::cout << "Render duration: " << 
         std::setprecision(2) << std::fixed <<
         std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count() / 1000.0 << "s\n";
+#endif
 }
 
 std::istream& CScene::Read(std::istream& Stream)
@@ -231,13 +247,13 @@ std::istream& CScene::Read(std::istream& Stream)
 
         if(Name == "sphere")
         {
-            CSphere* Sphere = new CSphere(Vec3(0.0f, 0.0f, 0.0f), 0.0f);
+            std::shared_ptr<CSphere> Sphere = std::make_shared<CSphere>(Vec3(0.0f, 0.0f, 0.0f), 0.0f);
             Sphere->ReadFromString(Contents);
             AddShape(Sphere);
         }
         else if(Name == "plane")
         {
-            CPlane* Plane = new CPlane(Vec3(0.0f, 0.0f, 0.0f), 0.0f);
+            std::shared_ptr<CPlane> Plane = std::make_shared<CPlane>(Vec3(0.0f, 0.0f, 0.0f), 0.0f);
             Plane->ReadFromString(Contents);
             AddShape(Plane);
         }

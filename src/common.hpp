@@ -14,6 +14,8 @@
 #include <atomic>
 #include <mutex>
 #include <sstream>
+#include <utility>
+#include <memory>
 
 typedef uint8_t u8; /**< Unsigned 8 bit integer. */
 typedef int8_t s8; /**< Signed 8 bit integer. */

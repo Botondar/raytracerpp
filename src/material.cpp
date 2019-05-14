@@ -1,6 +1,6 @@
 #include "material.hpp"
 
-IMaterial::IMaterial(Vec3 Color, CSharedPointer<CImage> Texture) :
+IMaterial::IMaterial(Vec3 Color, std::shared_ptr<CImage> Texture) :
     m_Color(Color),
     m_Texture(Texture)
 {
@@ -11,12 +11,12 @@ Vec3 IMaterial::GetColor() const
     return m_Color;
 }
 
-const CSharedPointer<CImage>& IMaterial::GetTexture() const
+const std::shared_ptr<CImage>& IMaterial::GetTexture() const
 {
     return m_Texture;
 }
 
-CMaterialDiffuse::CMaterialDiffuse(Vec3 Color, CSharedPointer<CImage> Texture) :
+CMaterialDiffuse::CMaterialDiffuse(Vec3 Color, std::shared_ptr<CImage> Texture) :
     IMaterial(Color, Texture)
 {
 
@@ -45,8 +45,8 @@ std::string& CMaterialDiffuse::ReadFromString(std::string& String)
             std::fstream File(Path, std::ios_base::binary | std::ios_base::in);
             if(File.is_open())
             {
-                m_Texture = new CImage;
-                File >> m_Texture;
+                m_Texture = std::make_shared<CImage>();
+                m_Texture->Read(File);
             }
         }
         else
@@ -72,7 +72,7 @@ void CMaterialDiffuse::WriteToString(std::string& String) const
     String += Stream.str();
 }
 
-CMaterialMetal::CMaterialMetal(Vec3 Color, r32 Fuzziness, CSharedPointer<CImage> Texture) :
+CMaterialMetal::CMaterialMetal(Vec3 Color, r32 Fuzziness, std::shared_ptr<CImage> Texture) :
     IMaterial(Color, Texture),
     m_Fuzziness(Fuzziness)
 {
@@ -112,8 +112,8 @@ std::string& CMaterialMetal::ReadFromString(std::string& String)
             std::fstream File(Path, std::ios_base::binary | std::ios_base::in);
             if(File.is_open())
             {
-                m_Texture = new CImage;
-                File >> m_Texture;
+                m_Texture = std::make_shared<CImage>();
+                m_Texture->Read(File);
             }
         }
         else
@@ -141,7 +141,7 @@ void CMaterialMetal::WriteToString(std::string& String) const
 }
 
 CMaterialDielectric::CMaterialDielectric(Vec3 Color, r32 RefractiveIndex, 
-                                         CSharedPointer<CImage> Texture) :
+                                         std::shared_ptr<CImage> Texture) :
     IMaterial(Color, Texture),
     m_RefractiveIndex(RefractiveIndex)
 {
@@ -198,8 +198,8 @@ std::string& CMaterialDielectric::ReadFromString(std::string& String)
             std::fstream File(Path, std::ios_base::binary | std::ios_base::in);
             if(File.is_open())
             {
-                m_Texture = new CImage;
-                File >> m_Texture;
+                m_Texture = std::make_shared<CImage>();
+                m_Texture->Read(File);
             }
         }
         else

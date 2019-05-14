@@ -213,7 +213,7 @@ Vec3 Cross(const Vec3& A, const Vec3& B)
 
 Vec3 Project(const Vec3& A, const Vec3& B)
 {
-    return B * Dot(A, B) / B.Length();
+    return Normalize(B) * Dot(A, B);
 }
 
 Vec3 Reject(const Vec3& A, const Vec3& B)

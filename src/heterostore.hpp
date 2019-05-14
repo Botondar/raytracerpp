@@ -1,7 +1,8 @@
 #pragma once
 
 #include <algorithm>
-#include "sharedpointer.hpp"
+#include <utility>
+#include <memory>
 
 /** Heterogoneous collection to store objects of the same interface but different subtypes. 
     Non-copyable.
@@ -16,10 +17,13 @@ public:
     CHeteroStore() :
         m_MaxSize(DEFAULT_SIZE),
         m_Size(0),
-        m_Data(new CSharedPointer<T>[DEFAULT_SIZE])
+        m_Data(new std::shared_ptr<T>[DEFAULT_SIZE])
     {
 
     }
+
+    CHeteroStore(const CHeteroStore& Other) = delete;
+    CHeteroStore& operator=(const CHeteroStore& Other) = delete;
 
     ~CHeteroStore()
     {
@@ -35,7 +39,7 @@ public:
     void Resize(size_t NewSize)
     {
         m_MaxSize = NewSize;
-        CSharedPointer<T>* NewData = new CSharedPointer<T>[NewSize];
+        std::shared_ptr<T>* NewData = new std::shared_ptr<T>[NewSize];
         
         size_t CopySize = std::min(NewSize, m_Size);
         for(size_t i = 0; i < CopySize; i++)
@@ -48,22 +52,10 @@ public:
         m_Data = NewData;
     }
 
-    /** Adds an element at the and of the container. 
-        Resizes the containter if needed.
-    */
-    void PushBack(T* Elem)
-    {
-        if(m_Size == m_MaxSize)
-        {
-            Resize(m_MaxSize + DEFAULT_INCREMENT_SIZE);
-        }
-        m_Data[m_Size++] = Elem;
-    }
-
     /** Adds an element at the and of the container.
         Resizes the containter if needed.
     */
-    void PushBack(CSharedPointer<T> Elem)
+    void PushBack(std::shared_ptr<T> Elem)
     {
         if(m_Size == m_MaxSize)
         {
@@ -74,7 +66,7 @@ public:
 
 
     /** Index operator to access elements. Throws, if Index is out of range. */
-    CSharedPointer<T>& operator[](size_t Index)
+    std::shared_ptr<T>& operator[](size_t Index)
     {
         if(Index >= m_Size)
         {
@@ -84,7 +76,7 @@ public:
     }
 
     /** Index operator to access elements. Throws, if Index is out of range. */
-    const CSharedPointer<T>& operator[](size_t Index) const
+    const std::shared_ptr<T>& operator[](size_t Index) const
     {
         if(Index >= m_Size)
         {
@@ -98,8 +90,5 @@ private:
 
     size_t m_MaxSize; /** Current size of the containter. */
     size_t m_Size; /** Number of elements in the container. */
-    CSharedPointer<T>* m_Data; /** Pointer to the elements of the containter. */
-
-    CHeteroStore(const CHeteroStore& Other) {} // = delete;
-    CHeteroStore& operator=(const CHeteroStore& Other) { return *this; } // = delete;
+    std::shared_ptr<T>* m_Data; /** Pointer to the elements of the containter. */
 };
